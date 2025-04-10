@@ -134,6 +134,44 @@ for (let i = 0; i < formInputs.length; i++) {
   });
 }
 
+// Contact form handling
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Deshabilitar el botón y mostrar estado de carga
+    formBtn.disabled = true;
+    formBtn.innerHTML = '<ion-icon name="paper-plane"></ion-icon><span>Enviando...</span>';
+
+    try {
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        // Mostrar mensaje de éxito
+        alert('¡Mensaje enviado con éxito!');
+        // Limpiar el formulario
+        form.reset();
+      } else {
+        // Mostrar mensaje de error
+        alert(result.message || 'Hubo un error al enviar el mensaje');
+      }
+    } catch (error) {
+      // Mostrar mensaje de error genérico
+      alert('Hubo un error al enviar el mensaje. Por favor intente más tarde.');
+    } finally {
+      // Restaurar el botón a su estado original
+      formBtn.disabled = false;
+      formBtn.innerHTML = '<ion-icon name="paper-plane"></ion-icon><span>Enviar Mensaje</span>';
+    }
+  });
+}
+
 
 
 // page navigation variables
